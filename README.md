@@ -106,9 +106,6 @@ The project follows **Clean Architecture** with the following layers:
 
 ### **API Endpoints**
 
-```markdown
-## API Endpoints
-
 ### Products
 
 | Method | Endpoint                            | Description               |
@@ -119,12 +116,8 @@ The project follows **Clean Architecture** with the following layers:
 | POST   | `/api/products`                     | Create a new product.     |
 | PUT    | `/api/products/{id}`                | Update a product.         |
 | DELETE | `/api/products/{id}`                | Delete a product.         |
-```
 
 ### **Future Work**
-
-```markdown
-## Future Work
 
 - **Background Jobs**:
   - Implement background jobs for sending emails and processing payments.
@@ -136,4 +129,3 @@ The project follows **Clean Architecture** with the following layers:
   - Integrate **Stripe** for payment processing.
 - **Notifications and Chat**:
   - Implement notifications for order updates and chat with customer service.
-```
