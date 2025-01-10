@@ -9,12 +9,18 @@ public class Cart
     public Guid Id { get; set; }
 
     [Required]
-    public required User User { get; set; }
-
-    [ForeignKey(nameof(UserId))]
+    [ForeignKey("User")]
     public Guid UserId { get; set; }
 
-    public List<CartItem> CartItems { get; set; } = [];
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [Required]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    // Navigation properties
+    public required User User { get; set; }
+    public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 }
 
 public class CartItem
@@ -23,18 +29,18 @@ public class CartItem
     public Guid Id { get; set; }
 
     [Required]
-    public required Cart Cart { get; set; }
-
-    [Required]
-    [ForeignKey(nameof(CartId))]
+    [ForeignKey(nameof(Cart))]
     public Guid CartId { get; set; }
 
     [Required]
-    public required Product Product { get; set; }
-
-    [ForeignKey(nameof(ProductId))]
+    [ForeignKey(nameof(Product))]
     public Guid ProductId { get; set; }
 
+    [Required]
     [Range(1, int.MaxValue)]
     public int Quantity { get; set; }
+
+    // Navigation properties
+    public required Cart Cart { get; set; }
+    public required Product Product { get; set; }
 }
