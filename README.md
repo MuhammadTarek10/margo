@@ -76,7 +76,7 @@ The project follows **Clean Architecture** with the following layers:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/margo.git
+   git clone https://github.com/MuhammadTarek10/margo.git
    cd margo
    ```
 
