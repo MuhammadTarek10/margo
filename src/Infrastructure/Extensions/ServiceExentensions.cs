@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Infrastructure.Persistance;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,8 @@ public static class ServiceExtensions
                             .AddEntityFrameworkStores<AppDbContext>()
                             .AddRoles<IdentityRole<Guid>>()
                             .AddDefaultTokenProviders();
+
+        services.AddScoped<IProductRepository, ProductRepository>();
     }
 
 }

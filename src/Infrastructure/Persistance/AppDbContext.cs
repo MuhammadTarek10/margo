@@ -5,11 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistance;
 
-
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using System;
-
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

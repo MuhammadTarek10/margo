@@ -23,7 +23,7 @@ public class Product
     public int Stock { get; set; }
 
     [MaxLength(50)]
-    public required string Category { get; set; }
+    public string? Category { get; set; }
 
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
