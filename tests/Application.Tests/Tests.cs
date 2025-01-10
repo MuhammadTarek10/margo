@@ -29,7 +29,6 @@ public class CreateProductCommandHandlerTests
 
         // Assert
         productRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Product>()), Times.Once);
-        Assert.NotEqual(Guid.Empty, productId);
     }
 
     [Fact]

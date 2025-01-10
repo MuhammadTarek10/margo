@@ -60,7 +60,7 @@ The project follows **Clean Architecture** with the following layers:
   - xUnit
   - Moq
 - **Tools**:
-  - Visual Studio / Visual Studio Code
+  - Neovim
   - dotnet CLI
 
 ## Getting Started
