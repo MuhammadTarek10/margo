@@ -101,7 +101,7 @@ The project follows **Clean Architecture** with the following layers:
 5. Run the application:
 
    ```bash
-   dotnet run
+   dotnet run --project src/Api
    ```
 
 ### **API Endpoints**
