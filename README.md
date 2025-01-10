@@ -8,7 +8,10 @@
   - [Technologies Used](#technologies-used)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
-  - [Installation](#installation) - [**API Endpoints**](#api-endpoints) - [**Future Work**](#future-work)
+  - [Installation](#installation)
+  - [**API Endpoints**](#api-endpoints)
+    - [Products](#products)
+  - [**Future Work**](#future-work)
   <!--toc:end-->
 
 Margo is an e-commerce application built using **Clean Architecture** and **.NET 9 Web API**. It follows the **CQRS pattern** and uses **SQLite** as the database. The application includes features like product management, user authentication, orders, carts, notifications, and more.
@@ -104,7 +107,7 @@ The project follows **Clean Architecture** with the following layers:
    dotnet run --project src/Api
    ```
 
-### **API Endpoints**
+## **API Endpoints**
 
 ### Products
 
@@ -117,7 +120,7 @@ The project follows **Clean Architecture** with the following layers:
 | PUT    | `/api/products/{id}`                | Update a product.         |
 | DELETE | `/api/products/{id}`                | Delete a product.         |
 
-### **Future Work**
+## **Future Work**
 
 - **Background Jobs**:
   - Implement background jobs for sending emails and processing payments.
