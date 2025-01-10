@@ -23,6 +23,13 @@ public class CartItem
     public Guid Id { get; set; }
 
     [Required]
+    public required Cart Cart { get; set; }
+
+    [Required]
+    [ForeignKey(nameof(CartId))]
+    public Guid CartId { get; set; }
+
+    [Required]
     public required Product Product { get; set; }
 
     [ForeignKey(nameof(ProductId))]

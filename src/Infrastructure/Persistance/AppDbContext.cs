@@ -15,6 +15,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
     internal DbSet<Product> Products { get; set; } = default!;
     internal DbSet<Order> Orders { get; set; } = default!;
+    internal DbSet<OrderItem> OrderItems { get; set; } = default!;
     internal DbSet<Cart> Carts { get; set; } = default!;
     internal DbSet<CartItem> CartItems { get; set; } = default!;
 
@@ -22,22 +23,29 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<Cart>()
-                    .HasOne(c => c.User)
-                    .WithMany()
-                    .HasForeignKey(c => c.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<CartItem>()
+             .HasOne(ci => ci.Cart)
+             .WithMany(c => c.CartItems)
+             .HasForeignKey(ci => ci.CartId)
+             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CartItem>()
-                    .HasOne(ci => ci.Product)
-                    .WithMany()
-                    .HasForeignKey(ci => ci.ProductId);
+            .HasOne(ci => ci.Product)
+            .WithMany()
+            .HasForeignKey(ci => ci.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<Order>()
-                    .HasOne(o => o.User)
-                    .WithMany()
-                    .HasForeignKey(o => o.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<OrderItem>()
+            .HasOne(oi => oi.Order)
+            .WithMany(o => o.OrderItems)
+            .HasForeignKey(oi => oi.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<OrderItem>()
+            .HasOne(oi => oi.Product)
+            .WithMany()
+            .HasForeignKey(oi => oi.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 }
