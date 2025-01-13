@@ -9,7 +9,6 @@ public class Order
     public Guid Id { get; set; }
 
     [Required]
-    [ForeignKey("User")]
     public Guid UserId { get; set; }
 
     [Required]
@@ -17,7 +16,6 @@ public class Order
     public decimal TotalAmount { get; set; }
 
     [Required]
-    [MaxLength(50)]
     public OrderStatus Status { get; set; } // e.g., "Pending", "Paid", "Shipped", "Delivered", "Cancelled"
 
     [MaxLength(100)]
@@ -29,8 +27,9 @@ public class Order
     [Required]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    // Navigation properties
-    public required User User { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User? User { get; set; }
+
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
 
@@ -50,11 +49,9 @@ public class OrderItem
     public Guid Id { get; set; }
 
     [Required]
-    [ForeignKey(nameof(Order))]
     public Guid OrderId { get; set; }
 
     [Required]
-    [ForeignKey(nameof(Product))]
     public Guid ProductId { get; set; }
 
     [Required]
@@ -66,7 +63,9 @@ public class OrderItem
     public decimal PriceAtTimeOfOrder { get; set; } // Historical price
 
     // Navigation properties
-    public required Order Order { get; set; }
-    public required Product Product { get; set; }
+    [ForeignKey(nameof(OrderId))]
+    public Order? Order { get; set; }
+    [ForeignKey(nameof(ProductId))]
+    public Product? Product { get; set; }
 }
 

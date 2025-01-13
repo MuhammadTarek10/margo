@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Interfaces;
 using Infrastructure.Persistance;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,7 @@ public static class ServiceExtensions
                             .AddDefaultTokenProviders();
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
     }
 
 }

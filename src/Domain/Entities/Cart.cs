@@ -9,7 +9,6 @@ public class Cart
     public Guid Id { get; set; }
 
     [Required]
-    [ForeignKey("User")]
     public Guid UserId { get; set; }
 
     [Required]
@@ -19,7 +18,8 @@ public class Cart
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation properties
-    public required User User { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User? User { get; set; }
     public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 }
 
@@ -29,11 +29,9 @@ public class CartItem
     public Guid Id { get; set; }
 
     [Required]
-    [ForeignKey(nameof(Cart))]
     public Guid CartId { get; set; }
 
     [Required]
-    [ForeignKey(nameof(Product))]
     public Guid ProductId { get; set; }
 
     [Required]
@@ -41,6 +39,8 @@ public class CartItem
     public int Quantity { get; set; }
 
     // Navigation properties
-    public required Cart Cart { get; set; }
-    public required Product Product { get; set; }
+    [ForeignKey(nameof(CartId))]
+    public Cart? Cart { get; set; }
+    [ForeignKey(nameof(ProductId))]
+    public Product? Product { get; set; }
 }
