@@ -7,8 +7,11 @@ public class OrderProfile : Profile
 {
     public OrderProfile()
     {
-        CreateMap<Order, OrderDto>();
-        CreateMap<OrderDto, Order>();
+        CreateMap<Order, OrderDto>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.GetStatusDescription()));
+
+        CreateMap<OrderDto, Order>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.GetStatus(src.Status ?? "Pending")));
 
         CreateMap<OrderItemDto, OrderItem>();
         CreateMap<OrderItem, OrderItemDto>();

@@ -71,6 +71,21 @@ public class Order
     {
         return $"Order ID: {Id}, Total Amount: {TotalAmount}, Status: {Status}, Payment Method: {GetPaymentMethodDescription()}";
     }
+
+    public string GetStatusDescription()
+    {
+        return Status switch
+        {
+            OrderStatus.Pending => "Pending",
+            OrderStatus.Paid => "Paid",
+            OrderStatus.Failed => "Failed",
+            OrderStatus.Shipped => "Shipped",
+            OrderStatus.Delivered => "Delivered",
+            OrderStatus.Cancelled => "Cancelled",
+            _ => "Unknown"
+        };
+    }
+
 }
 
 public class OrderItem
