@@ -1,5 +1,7 @@
 using Application.Features.Orders.Dtos;
 
+using AutoMapper;
+
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
@@ -14,6 +16,7 @@ public class GetOrderByIdQuery : IRequest<OrderDto>
 }
 
 public class GetOrderByIdQueryHandler(
+        IMapper mapper,
     IOrderRepository orderRepository) : IRequestHandler<GetOrderByIdQuery, OrderDto>
 {
     public async Task<OrderDto> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
@@ -22,19 +25,6 @@ public class GetOrderByIdQueryHandler(
         var order = await orderRepository.GetByIdAsync(request.OrderId);
         if (order is null) throw new NotFoundException(nameof(Order), request.OrderId.ToString());
 
-        // Map the order to a DTO
-        return new OrderDto
-        {
-            Id = order.Id,
-            TotalAmount = order.TotalAmount,
-            Status = order.Status,
-            CreatedAt = order.CreatedAt,
-            UpdatedAt = order.UpdatedAt,
-            Items = order.Items.Select(item => new OrderItemDto
-            {
-                ProductId = item.ProductId,
-                Quantity = item.Quantity
-            }).ToList()
-        };
+        return mapper.Map<OrderDto>(order);
     }
 }

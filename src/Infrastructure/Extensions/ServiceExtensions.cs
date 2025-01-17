@@ -12,19 +12,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Application.Services.Token;
+using Infrastructure.Services.Token;
+using Infrastructure.Services.Auth;
+using Application.Services.Auth;
 
 namespace Infrastructure.Extensions;
 
 public static class ServiceExtensions
 {
-    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructure(this IServiceCollection service, IConfiguration configuration)
     {
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<AppDbContext>(
+        service.AddDbContext<AppDbContext>(
                        options => options.UseSqlite(connectionString)
                                          .EnableSensitiveDataLogging());
 
-        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+        service.AddIdentity<User, IdentityRole<Guid>>(options =>
                             options.SignIn.RequireConfirmedAccount = false)
                             .AddEntityFrameworkStores<AppDbContext>()
                             .AddRoles<IdentityRole<Guid>>()
@@ -33,10 +37,11 @@ public static class ServiceExtensions
         var jwtSettings = configuration.GetSection("JwtSettings");
         var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
 
-        services.AddAuthentication(x =>
+        service.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(options =>
         {
@@ -50,10 +55,32 @@ public static class ServiceExtensions
                 ValidAudience = jwtSettings["Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(key)
             };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine("Authentication failed: " + context.Exception.Message);
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    Console.WriteLine("Token validated successfully.");
+                    return Task.CompletedTask;
+                },
+                OnMessageReceived = context =>
+                {
+                    Console.WriteLine("Token received: " + context.Token);
+                    return Task.CompletedTask;
+                }
+            };
         });
 
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
+
+        service.AddScoped<ITokenService, TokenService>();
+        service.AddScoped<IUserContext, UserContext>();
+        service.AddScoped<IProductRepository, ProductRepository>();
+        service.AddScoped<IOrderRepository, OrderRepository>();
     }
 
 }

@@ -4,6 +4,7 @@ using Application.Features.DTOs;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -22,6 +23,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // GET: api/products/{id}
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {
@@ -31,6 +33,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // GET: api/products/category/{category}
+    [Authorize]
     [HttpGet("category/{category}")]
     public async Task<IActionResult> GetProductsByCategory(string category)
     {
@@ -40,15 +43,18 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // POST: api/products
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
     {
+
         var command = new CreateProductCommand { ProductDto = productDto };
         var productId = await mediator.Send(command);
         return Ok(productId);
     }
 
     // PUT: api/products/{id}
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductDto productDto)
     {
@@ -67,6 +73,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // DELETE: api/products/{id}
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(Guid id)
     {

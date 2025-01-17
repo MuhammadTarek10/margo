@@ -4,10 +4,12 @@ using System.Text;
 
 using Domain.Entities;
 
+using Application.Services.Token;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Application.Services.Token;
+namespace Infrastructure.Services.Token;
 
 internal class TokenService(IConfiguration configuration) : ITokenService
 {
@@ -22,7 +24,6 @@ internal class TokenService(IConfiguration configuration) : ITokenService
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimTypes.Name, user.UserName!)
             }),
             Expires = DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpiryInMinutes"]!)),
             SigningCredentials = new SigningCredentials(

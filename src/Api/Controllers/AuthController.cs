@@ -13,7 +13,7 @@ public class AuthController(
         var command = new RegisterUserCommand { RegisterDto = registerDto };
         var userId = await mediator.Send(command);
 
-        return Ok(new { Message = "User registered successfully.", UserId = userId });
+        return Ok(new { userId });
     }
 
     [HttpPost("login")]
@@ -22,6 +22,6 @@ public class AuthController(
         var command = new LoginUserCommand { LoginDto = loginDto };
         var token = await mediator.Send(command);
 
-        return Ok(new { Token = token });
+        return Ok(new { token });
     }
 }

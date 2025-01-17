@@ -1,4 +1,5 @@
 using Api.Middlewares;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
@@ -8,7 +9,6 @@ public static class ApplicationBuilderExtensions
 {
     public static void AddPresentation(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication();
         builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options =>
                 {

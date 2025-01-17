@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Application.Services.Token;
 using MediatR;
 using Application.Services.Validator;
 
@@ -21,10 +20,6 @@ public static class ServiceCollectionExtensions
                   .AddFluentValidationAutoValidation();
 
         service.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-
-        service.AddAuthorization();
-        service.AddScoped<ITokenService, TokenService>();
 
         service.AddHttpContextAccessor();
     }

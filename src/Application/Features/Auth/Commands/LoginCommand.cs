@@ -1,8 +1,9 @@
 using MediatR;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Application.Services.Token;
 using Application.Features.Auth.DTOs;
+using Domain.Exceptions;
+using Application.Services.Token;
 
 public class LoginUserCommand : IRequest<string>
 {
@@ -21,7 +22,7 @@ public class LoginUserCommandHandler(
         // Check if the user exists and the password is correct
         if (user == null || !await userManager.CheckPasswordAsync(user, request.LoginDto.Password))
         {
-            throw new UnauthorizedAccessException("Invalid email or password.");
+            throw new AuthException("Invalid email or password.");
         }
 
         // Generate a JWT token

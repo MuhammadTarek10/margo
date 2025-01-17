@@ -1,7 +1,11 @@
+using Application.Featuers.Orders.Queries;
 using Application.Features.Orders.Commands;
 using Application.Features.Orders.Dtos;
 using Application.Features.Orders.Queries;
+
 using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -19,6 +23,7 @@ public class OrderController(IMediator mediator) : ControllerBase
     }
 
     // GET: api/orders/{id}
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<OrderDto>> GetOrderById(Guid id)
     {
@@ -28,6 +33,7 @@ public class OrderController(IMediator mediator) : ControllerBase
     }
 
     // POST: api/orders
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<Guid>> CreateOrder([FromBody] CreateOrderDto orderDto)
     {
@@ -37,6 +43,7 @@ public class OrderController(IMediator mediator) : ControllerBase
     }
 
     // DELETE: api/orders/{id}
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteOrder(Guid id)
     {
@@ -44,4 +51,16 @@ public class OrderController(IMediator mediator) : ControllerBase
         await mediator.Send(command);
         return NoContent();
     }
+
+
+    // GET: api/orders/mine
+    [Authorize]
+    [HttpGet("mine")]
+    public async Task<ActionResult<List<OrderDto>>> GetMyOrders()
+    {
+        var query = new GetMyOrdersQuery();
+        var orders = await mediator.Send(query);
+        return Ok(orders);
+    }
+
 }
