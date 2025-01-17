@@ -12,7 +12,7 @@ public class OrderRepository(AppDbContext context) : IOrderRepository
     public async Task<Order> GetByIdAsync(Guid id)
     {
         return await context.Orders
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .Include(o => o.User)
             .FirstOrDefaultAsync(o => o.Id == id) ?? throw new NotFoundException(nameof(Order), id.ToString());
     }
@@ -20,7 +20,7 @@ public class OrderRepository(AppDbContext context) : IOrderRepository
     public async Task<List<Order>> GetAllAsync()
     {
         return await context.Orders
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .Include(o => o.User)
             .ToListAsync();
     }
@@ -50,7 +50,7 @@ public class OrderRepository(AppDbContext context) : IOrderRepository
     public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
     {
         return await context.Orders
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .Include(o => o.User)
             .Where(o => o.UserId == userId)
             .ToListAsync();

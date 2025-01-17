@@ -1,7 +1,9 @@
-using Application.DTOs;
+using Application.Featuers.Products.DTOs;
 using Application.Features.Commands;
 using Application.Features.DTOs;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;

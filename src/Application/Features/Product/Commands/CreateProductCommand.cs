@@ -1,7 +1,9 @@
-using Application.DTOs;
-using Domain.Entities;
-using FluentValidation;
 using MediatR;
+using FluentValidation;
+
+using Application.Featuers.Products.DTOs;
+using Domain.Entities;
+using AutoMapper;
 
 namespace Application.Features.Commands;
 
@@ -12,21 +14,14 @@ public class CreateProductCommand : IRequest<Guid>
 
 
 
-public class CreateProductCommandHandler(IProductRepository repository) : IRequestHandler<CreateProductCommand, Guid>
+public class CreateProductCommandHandler(
+        IMapper mapper,
+        IProductRepository repository) : IRequestHandler<CreateProductCommand, Guid>
 
 {
     public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = new Product
-        {
-            Name = request.ProductDto.Name,
-            Description = request.ProductDto.Description,
-            Price = request.ProductDto.Price,
-            Stock = request.ProductDto.Stock,
-            Category = request.ProductDto.Category,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+        Product product = mapper.Map<Product>(request.ProductDto);
 
         await repository.AddAsync(product);
 

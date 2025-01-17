@@ -1,6 +1,10 @@
-using Application.DTOs;
+using Application.Featuers.Products.DTOs;
 using Application.Features.Commands;
+
+using AutoMapper;
+
 using Domain.Entities;
+
 using Moq;
 
 public class CreateProductCommandHandlerTests
@@ -10,7 +14,8 @@ public class CreateProductCommandHandlerTests
     {
         // Arrange
         var productRepositoryMock = new Mock<IProductRepository>();
-        var handler = new CreateProductCommandHandler(productRepositoryMock.Object);
+        var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new ProductProfile())));
+        var handler = new CreateProductCommandHandler(mapper, productRepositoryMock.Object);
 
         var command = new CreateProductCommand
         {
@@ -36,7 +41,8 @@ public class CreateProductCommandHandlerTests
     {
         // Arrange
         var productRepositoryMock = new Mock<IProductRepository>();
-        var handler = new CreateProductCommandHandler(productRepositoryMock.Object);
+        var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new ProductProfile())));
+        var handler = new CreateProductCommandHandler(mapper, productRepositoryMock.Object);
 
         var command = new CreateProductCommand
         {

@@ -30,7 +30,7 @@ public class Order
     [ForeignKey(nameof(UserId))]
     public User? User { get; set; }
 
-    public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
 
 
     public enum OrderStatus
@@ -68,4 +68,3 @@ public class OrderItem
     [ForeignKey(nameof(ProductId))]
     public Product? Product { get; set; }
 }
-

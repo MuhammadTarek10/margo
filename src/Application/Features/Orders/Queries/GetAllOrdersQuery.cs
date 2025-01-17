@@ -1,5 +1,7 @@
 using Application.Features.Orders.Dtos;
+
 using Domain.Interfaces;
+
 using MediatR;
 
 namespace Application.Features.Orders.Queries;
@@ -23,7 +25,7 @@ public class GetAllOrdersQueryHandler(
             Status = order.Status,
             CreatedAt = order.CreatedAt,
             UpdatedAt = order.UpdatedAt,
-            Items = order.OrderItems.Select(item => new OrderItemDto
+            Items = order.Items.Select(item => new OrderItemDto
             {
                 ProductId = item.ProductId,
                 Quantity = item.Quantity

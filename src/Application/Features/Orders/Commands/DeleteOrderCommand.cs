@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
+
 using MediatR;
 
 namespace Application.Features.Orders.Commands;
@@ -16,7 +17,7 @@ public class DeleteOrderCommandHandler(
     public async Task Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
     {
         // Retrieve the order
-        var order = await orderRepository.GetByIdAsync(request.OrderId);
+        Order order = await orderRepository.GetByIdAsync(request.OrderId);
         if (order is null) throw new NotFoundException(nameof(Order), request.OrderId.ToString());
 
         // Delete the order

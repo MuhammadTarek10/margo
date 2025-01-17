@@ -1,18 +1,24 @@
+using Application.Featuers.Products.DTOs;
+
+using AutoMapper;
+
 using Domain.Entities;
+
 using MediatR;
 
-public class GetProductsByCategoryQuery : IRequest<List<Product>>
+public class GetProductsByCategoryQuery : IRequest<List<ProductDto>>
 {
     public required string Category { get; set; }
 }
 
-public class GetProductsByCategoryQueryHandler(IProductRepository repository) : IRequestHandler<GetProductsByCategoryQuery, List<Product>>
+public class GetProductsByCategoryQueryHandler(
+    IMapper mapper,
+    IProductRepository repository) : IRequestHandler<GetProductsByCategoryQuery, List<ProductDto>>
 {
 
-    public async Task<List<Product>> Handle(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
+    public async Task<List<ProductDto>> Handle(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
     {
-        return await repository.GetByCategoryAsync(request.Category);
-
+        var products = await repository.GetByCategoryAsync(request.Category);
+        return mapper.Map<List<ProductDto>>(products);
     }
 }
-

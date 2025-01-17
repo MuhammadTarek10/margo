@@ -1,11 +1,10 @@
 using MediatR;
-using Domain.Exceptions;
 using Domain.Entities;
 using Domain.Interfaces;
 using Application.Features.Orders.Dtos;
+using AutoMapper;
 
 namespace Application.Features.Orders.Commands;
-
 
 public class CreateOrderCommand : IRequest<Guid>
 {
@@ -13,25 +12,17 @@ public class CreateOrderCommand : IRequest<Guid>
 }
 
 public class CreateOrderCommandHandler(
+    IMapper mapper,
     IOrderRepository orderRepository,
     IProductRepository productRepository) : IRequestHandler<CreateOrderCommand, Guid>
 {
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var order = new Order
-        {
-            TotalAmount = await CalculateTotalAmount(request.OrderDto.Items),
-            Status = Order.OrderStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-            OrderItems = request.OrderDto.Items.Select(item => new OrderItem
-            {
-                ProductId = item.ProductId,
-                Quantity = item.Quantity
-            }).ToList()
-        };
 
+        Order order = mapper.Map<Order>(request.OrderDto);
+        order.Status = Order.OrderStatus.Pending;
+        order.TotalAmount = await CalculateTotalAmount(request.OrderDto.Items);
 
         await orderRepository.AddAsync(order);
 

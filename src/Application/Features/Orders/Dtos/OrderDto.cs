@@ -5,6 +5,7 @@ namespace Application.Features.Orders.Dtos;
 public class OrderDto
 {
     public Guid Id { get; set; }
+    public Guid UserId { get; set; }
     public decimal TotalAmount { get; set; }
     public OrderStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
