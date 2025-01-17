@@ -27,6 +27,8 @@ public class AddProductToCartCommandHandler(
         var product = await productRepository.GetByIdAsync(request.CartDto.ProductId);
         if (product is null) throw new NotFoundException(nameof(product), request.CartDto.ProductId.ToString());
 
+        if (request.CartDto.Quantity > product.Stock) throw new BadRequestException("Product is out of stock");
+
 
         var cart = await cartRepository.GetCartByUserIdAsync(userId);
         if (cart is null)
@@ -34,6 +36,7 @@ public class AddProductToCartCommandHandler(
             cart = new Cart { UserId = userId };
             await cartRepository.AddAsync(cart);
         }
+
 
         var cartItem = cart.Items.FirstOrDefault(ci => ci.ProductId == request.CartDto.ProductId);
         if (cartItem is null)

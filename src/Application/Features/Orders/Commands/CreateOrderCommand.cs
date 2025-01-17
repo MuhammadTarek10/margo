@@ -18,6 +18,7 @@ public class CreateOrderCommandHandler(
     IMapper mapper,
     ICartRepository cartRepository,
     IOrderRepository orderRepository,
+    IProductRepository productRepository,
     IPaymentService paymentService,
     IMediator mediator) : IRequestHandler<CreateOrderCommand, Guid>
 {
@@ -42,9 +43,17 @@ public class CreateOrderCommandHandler(
         order.TransactionId = result.TransactionId;
         order.PaymentDetails = result.Success ? "Stripe payment successful" : result.ErrorMessage;
 
-        if (result.Success) await cartRepository.ClearCartAsync(userId);
+        if (result.Success)
+        {
+            await cartRepository.ClearCartAsync(userId);
+            foreach (var item in cart.Items)
+            {
+                Product product = await productRepository.GetByIdAsync(item.ProductId);
+                product.Stock -= item.Quantity;
+                await productRepository.UpdateAsync(product);
+            }
+        }
 
-        // Update the Order status
         order.Status = result.Success ? Order.OrderStatus.Paid : Order.OrderStatus.Failed;
 
         await orderRepository.AddAsync(order);
