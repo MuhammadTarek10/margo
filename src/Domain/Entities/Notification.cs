@@ -13,8 +13,18 @@ public class Notification
     public Guid UserId { get; set; }
 
     [Required]
+    [MaxLength(50)]
+    public required string Subject { get; set; }
+
+    [Required]
     [MaxLength(500)]
     public required string Message { get; set; }
+
+    [Required]
+    public Guid RecipientId { get; set; }
+
+    [Required]
+    public NotificationStatus Status { get; set; }
 
     [Required]
     public bool IsRead { get; set; } = false;
@@ -22,6 +32,18 @@ public class Notification
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    [Required]
+    public DateTime SentAt { get; set; }
+
     // Navigation properties
-    public required User User { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User? User { get; set; }
+
+
+    public enum NotificationStatus
+    {
+        Pending,    // Notification is created but not yet sent
+        Sent,       // Notification has been sent
+        Failed      // Notification failed to send
+    }
 }

@@ -5,6 +5,7 @@ using AutoMapper;
 using Application.Services.Auth;
 using Domain.Exceptions;
 using Application.Services.Payement;
+using Application.Events.Notifications;
 
 namespace Application.Features.Commands;
 
@@ -17,7 +18,8 @@ public class CreateOrderCommandHandler(
     IMapper mapper,
     ICartRepository cartRepository,
     IOrderRepository orderRepository,
-    IPaymentService paymentService) : IRequestHandler<CreateOrderCommand, Guid>
+    IPaymentService paymentService,
+    IMediator mediator) : IRequestHandler<CreateOrderCommand, Guid>
 {
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -42,12 +44,18 @@ public class CreateOrderCommandHandler(
 
         if (result.Success) await cartRepository.ClearCartAsync(userId);
 
-        Console.WriteLine($"Result: {result.Success}, TransactionId: {result.TransactionId}, ErrorMessage: {result.ErrorMessage}");
-
         // Update the Order status
         order.Status = result.Success ? Order.OrderStatus.Paid : Order.OrderStatus.Failed;
 
         await orderRepository.AddAsync(order);
+
+        await mediator.Publish(new OrderCreatedEvent
+        {
+            OrderId = order.Id,
+            UserId = order.UserId,
+            TotalAmount = order.TotalAmount
+        });
+
         return order.Id;
     }
 }
