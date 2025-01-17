@@ -84,7 +84,7 @@ public class ProductsController(IMediator mediator, ILogger<ProductsController> 
 
             var command = new CreateProductCommand { ProductDto = productDto };
             var productId = await mediator.Send(command);
-            return Ok(new { success = true, productId });
+            return Ok(new { success = true, data = productId });
         }
         catch (Exception ex)
         {

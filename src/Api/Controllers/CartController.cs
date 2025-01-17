@@ -37,7 +37,7 @@ public class CartController(IMediator mediator, ILogger<CartController> logger) 
         try
         {
             Guid result = await mediator.Send(new AddProductToCartCommand { CartDto = dto });
-            return Ok(new { success = true, cartItemId = result });
+            return Ok(new { success = true, data = result });
         }
         catch (Exception ex)
         {

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 public class OrderController(IMediator mediator, ILogger<OrderController> logger) : ControllerBase
 {
     // GET: api/orders
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet]
     public async Task<IActionResult> GetAllOrders()
     {
@@ -57,12 +58,13 @@ public class OrderController(IMediator mediator, ILogger<OrderController> logger
         try
         {
             var orderId = await mediator.Send(new CreateOrderCommand());
-            return Ok(new { success = true, orderId });
+            return Ok(new { success = true, data = orderId });
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error creating order");
-            return StatusCode(500, new { success = false, message = "An error occurred while creating the order." });
+            var value = new { success = false, message = $"An error occurred while creating the order: [{ex.Message}]." };
+            return StatusCode(500, value);
         }
     }
 
@@ -80,7 +82,8 @@ public class OrderController(IMediator mediator, ILogger<OrderController> logger
         catch (Exception ex)
         {
             logger.LogError(ex, "Error retrieving user's orders");
-            return StatusCode(500, new { success = false, message = "An error occurred while retrieving your orders." });
+            var value = new { success = false, message = $"An error occurred while retrieving your orders: [{ex.Message}]." };
+            return StatusCode(500, value);
         }
     }
 
@@ -98,7 +101,8 @@ public class OrderController(IMediator mediator, ILogger<OrderController> logger
         catch (Exception ex)
         {
             logger.LogError(ex, $"Error deleting order with ID {id}");
-            return StatusCode(500, new { success = false, message = "An error occurred while deleting the order." });
+            var value = new { success = false, message = $"An error occurred while deleting the order: [{ex.Message}]." };
+            return StatusCode(500, new { success = false, value });
         }
     }
 }
