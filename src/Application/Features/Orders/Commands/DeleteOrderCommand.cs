@@ -4,7 +4,7 @@ using Domain.Interfaces;
 
 using MediatR;
 
-namespace Application.Features.Orders.Commands;
+namespace Application.Features.Commands;
 
 public class DeleteOrderCommand : IRequest
 {

@@ -2,8 +2,6 @@ using Application.Featuers.Products.DTOs;
 
 using AutoMapper;
 
-using Domain.Entities;
-
 using MediatR;
 
 public class GetProductsByCategoryQuery : IRequest<List<ProductDto>>

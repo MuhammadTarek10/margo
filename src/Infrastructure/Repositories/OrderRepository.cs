@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class OrderRepository(AppDbContext context) : IOrderRepository
+internal class OrderRepository(AppDbContext context) : IOrderRepository
 {
 
     public async Task<Order> GetByIdAsync(Guid id)

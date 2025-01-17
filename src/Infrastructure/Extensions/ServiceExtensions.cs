@@ -56,24 +56,6 @@ public static class ServiceExtensions
                 IssuerSigningKey = new SymmetricSecurityKey(key)
             };
 
-            options.Events = new JwtBearerEvents
-            {
-                OnAuthenticationFailed = context =>
-                {
-                    Console.WriteLine("Authentication failed: " + context.Exception.Message);
-                    return Task.CompletedTask;
-                },
-                OnTokenValidated = context =>
-                {
-                    Console.WriteLine("Token validated successfully.");
-                    return Task.CompletedTask;
-                },
-                OnMessageReceived = context =>
-                {
-                    Console.WriteLine("Token received: " + context.Token);
-                    return Task.CompletedTask;
-                }
-            };
         });
 
 
@@ -81,6 +63,7 @@ public static class ServiceExtensions
         service.AddScoped<IUserContext, UserContext>();
         service.AddScoped<IProductRepository, ProductRepository>();
         service.AddScoped<IOrderRepository, OrderRepository>();
+        service.AddScoped<ICartRepository, CartRepository>();
     }
 
 }

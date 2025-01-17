@@ -1,5 +1,5 @@
 using Application.Featuers.Orders.Queries;
-using Application.Features.Orders.Commands;
+using Application.Features.Commands;
 using Application.Features.Orders.Dtos;
 using Application.Features.Orders.Queries;
 
@@ -42,17 +42,6 @@ public class OrderController(IMediator mediator) : ControllerBase
         return Ok(orderId);
     }
 
-    // DELETE: api/orders/{id}
-    [Authorize]
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteOrder(Guid id)
-    {
-        var command = new DeleteOrderCommand { OrderId = id };
-        await mediator.Send(command);
-        return NoContent();
-    }
-
-
     // GET: api/orders/mine
     [Authorize]
     [HttpGet("mine")]
@@ -63,4 +52,13 @@ public class OrderController(IMediator mediator) : ControllerBase
         return Ok(orders);
     }
 
+    // DELETE: api/orders/{id}
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteOrder(Guid id)
+    {
+        var command = new DeleteOrderCommand { OrderId = id };
+        await mediator.Send(command);
+        return NoContent();
+    }
 }

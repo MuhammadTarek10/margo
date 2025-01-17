@@ -4,7 +4,7 @@ using Domain.Interfaces;
 using Application.Features.Orders.Dtos;
 using AutoMapper;
 
-namespace Application.Features.Orders.Commands;
+namespace Application.Features.Commands;
 
 public class CreateOrderCommand : IRequest<Guid>
 {

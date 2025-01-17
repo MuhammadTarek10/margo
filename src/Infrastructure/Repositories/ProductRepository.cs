@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class ProductRepository(AppDbContext context) : IProductRepository
+internal class ProductRepository(AppDbContext context) : IProductRepository
 {
 
     public async Task<Product> GetByIdAsync(Guid id)
