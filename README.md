@@ -186,24 +186,30 @@ Run unit and integration tests using the following command:
 dotnet test
 ```
 
----
+## Future Work
 
-## Contributing
+### **Admin Dashboard**
 
-1. Fork the repository.
-2. Create a new feature branch (`git checkout -b feature/YourFeature`).
-3. Commit your changes (`git commit -m 'Add new feature'`).
-4. Push to the branch (`git push origin feature/YourFeature`).
-5. Open a pull request.
+- **Sales Analytics**:
+  - Implement real-time and historical sales analytics for admins.
+  - Display key metrics such as total revenue, sales trends, and top-selling products.
+- **Order Management**:
+  - Allow admins to view, update, and process orders directly from the dashboard.
+- **Inventory Management**:
+  - Provide tools for managing product stock and categorization.
 
----
+### **Notifications**
 
-## License
+- **Order Status Updates**:
+  - Notify users in real-time about the status of their orders (e.g., confirmed, shipped, delivered).
+- **Admin Alerts**:
+  - Send notifications to admins about low stock, new orders, and system updates.
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+### **Chat System**
 
----
-
-## Contact
-
-For inquiries or support, please contact [your-email@example.com].
+- **Customer Service Chat**:
+  - Implement a live chat system to enable users to contact customer service for inquiries or support.
+- **Admin-User Messaging**:
+  - Allow admins to respond to user messages through the admin dashboard.
+- **Chat History**:
+  - Maintain a log of chat conversations for reference and analysis.
