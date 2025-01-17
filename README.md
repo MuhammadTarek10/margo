@@ -1,92 +1,162 @@
-# Margo - E-Commerce Application
+# Margo E-Commerce API
 
-<!--toc:start-->
+## Overview
 
-- [Margo - E-Commerce Application](#margo-e-commerce-application)
-  - [Features](#features)
-  - [Project Structure](#project-structure)
-  - [Technologies Used](#technologies-used)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [**API Endpoints**](#api-endpoints)
-    - [Products](#products)
-  - [**Future Work**](#future-work)
-  <!--toc:end-->
+Margo is a feature-rich E-Commerce API designed to facilitate online shopping experiences. Built using .NET Core with a clean architecture approach, it includes features like real-time notifications, chat support, and seller analytics, providing a robust foundation for scalable and efficient e-commerce solutions.
 
-Margo is an e-commerce application built using **Clean Architecture** and **.NET 9 Web API**. It follows the **CQRS pattern** and uses **SQLite** as the database. The application includes features like product management, user authentication, orders, carts, notifications, and more.
+---
 
 ## Features
 
-- **Product Management**:
-  - Create, update, delete, and retrieve products.
-  - Filter products by category.
-- **User Management**:
-  - Register, login, and manage user profiles.
-- **Orders and Carts**:
-  - Add products to a cart.
-  - Place orders and manage order status.
-- **Notifications**:
-  - Send notifications for order updates.
-- **Chat**:
-  - Chat with customer service.
-- **Background Jobs**:
-  - Send emails asynchronously.
-- **Payment Integration**:
-  - Process payments using **Stripe**.
-- **Admin Dashboard**:
-  - View sales analytics and manage products/orders.
+### General Features:
+
+- Authentication and Authorization using JWT.
+- Clean Architecture pattern for maintainability.
+- SQLite as the database.
+- CQRS (Command Query Responsibility Segregation) for query and command separation.
+
+### Cart Management:
+
+- Add products to a cart.
+- Remove products from a cart.
+- View the current cart.
+
+### Order Management:
+
+- View all orders (admin only).
+- View individual orders.
+- Create an order from the cart.
+- View personal orders.
+- Delete an order.
+
+### Product Management (Admin Only):
+
+- Create, update, and delete products.
+- View all products.
+- View products by category.
+- View individual product details.
+
+### Authentication:
+
+- Register new users.
+- Login with JWT token generation.
+
+### Notifications:
+
+- Real-time notifications for sellers when purchases are made.
+
+### Chat:
+
+- Chat feature for customers to communicate with customer service.
+
+### Analytics:
+
+- Seller dashboard includes analytics for sales and customer insights.
+
+---
 
 ## Project Structure
 
-The project follows **Clean Architecture** with the following layers:
+```
+Margo
+├── Api
+│   ├── Controllers
+│   │   ├── AuthController.cs
+│   │   ├── CartController.cs
+│   │   ├── OrderController.cs
+│   │   └── ProductsController.cs
+│   ├── Middlewares
+│   ├── Program.cs
+│   └── appsettings.json
+├── Application
+│   ├── Features
+│   │   ├── Auth
+│   │   │   ├── Commands
+│   │   │   └── DTOs
+│   │   ├── Cart
+│   │   │   ├── Commands
+│   │   │   ├── Queries
+│   │   │   └── DTOs
+│   │   ├── Orders
+│   │   │   ├── Commands
+│   │   │   ├── Queries
+│   │   │   └── DTOs
+│   │   └── Products
+│   │       ├── Commands
+│   │       ├── Queries
+│   │       └── DTOs
+│   └── Common
+├── Domain
+│   ├── Entities
+│   ├── Interfaces
+│   └── Exceptions
+├── Infrastructure
+│   ├── Persistence
+│   │   ├── AppDbContext.cs
+│   │   ├── Migrations
+│   │   └── Seeders
+│   ├── Repositories
+│   └── Services
+└── Tests
+    ├── UnitTests
+    └── IntegrationTests
+```
 
-- **Domain**:
-  - Contains entities, enums, and domain logic.
-- **Application**:
-  - Contains use cases, commands, queries, and application logic.
-- **Infrastructure**:
-  - Contains database context, repositories, and external services.
-- **API**:
-  - Contains controllers and serves as the entry point for the application.
+---
 
-## Technologies Used
+## Endpoints
 
-- **Backend**:
-  - .NET 9
-  - Entity Framework Core
-  - SQLite
-  - MediatR (CQRS)
-  - FluentValidation
-  - Stripe (for payments)
-- **Testing**:
-  - xUnit
-  - Moq
-- **Tools**:
-  - Neovim
-  - dotnet CLI
+### Authentication
 
-## Getting Started
+- `POST /api/auth/register` - Register a new user.
+- `POST /api/auth/login` - Login and receive a JWT token.
 
-### Prerequisites
+### Cart
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [SQLite](https://sqlite.org/index.html)
-- [Stripe Account](https://stripe.com) (for payment integration)
+- `GET /api/cart` - View current cart.
+- `POST /api/cart/add-product` - Add a product to the cart.
+- `DELETE /api/cart/remove-product` - Remove a product from the cart.
+
+### Orders
+
+- `GET /api/orders` - Get all orders (admin only).
+- `GET /api/orders/{id}` - Get a specific order.
+- `POST /api/orders` - Create a new order.
+- `GET /api/orders/mine` - Get personal orders.
+- `DELETE /api/orders/{id}` - Delete an order.
+
+### Products
+
+- `GET /api/products` - Get all products.
+- `GET /api/products/{id}` - Get product details by ID.
+- `GET /api/products/category/{category}` - Get products by category.
+- `POST /api/products` - Create a new product (admin only).
+- `PUT /api/products/{id}` - Update a product (admin only).
+- `DELETE /api/products/{id}` - Delete a product (admin only).
+
+---
+
+## Prerequisites
+
+- .NET 7.0 SDK
+- SQLite
+- Node.js (for real-time features and frontend integration)
+- Docker (for containerization, optional)
+
+---
 
 ## Installation
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/MuhammadTarek10/margo.git
-   cd margo
+   git clone https://github.com/your-username/margo-api.git
    ```
 
-2. Install dependencies:
+2. Navigate to the project directory:
 
    ```bash
-   dotnet restore
+   cd margo-api
    ```
 
 3. Build the project:
@@ -95,40 +165,45 @@ The project follows **Clean Architecture** with the following layers:
    dotnet build
    ```
 
-4. Run the migrations:
+4. Apply migrations to initialize the database:
 
    ```bash
    dotnet ef database update
    ```
 
 5. Run the application:
-
    ```bash
-   dotnet run --project src/Api
+   dotnet run --project Api
    ```
 
-## API Endpoints
+---
 
-### Products
+## Testing
 
-| Method | Endpoint                            | Description               |
-| ------ | ----------------------------------- | ------------------------- |
-| GET    | `/api/products`                     | Get all products.         |
-| GET    | `/api/products/{id}`                | Get a product by ID.      |
-| GET    | `/api/products/category/{category}` | Get products by category. |
-| POST   | `/api/products`                     | Create a new product.     |
-| PUT    | `/api/products/{id}`                | Update a product.         |
-| DELETE | `/api/products/{id}`                | Delete a product.         |
+Run unit and integration tests using the following command:
 
-## Future Work
+```bash
+dotnet test
+```
 
-- **Background Jobs**:
-  - Implement background jobs for sending emails and processing payments.
-- **Authentication and Authorization**:
-  - Add JWT or OAuth2 for user authentication and role-based authorization.
-- **Admin Dashboard**:
-  - Build a dashboard for sales analytics and product/order management.
-- **Payment Integration**:
-  - Integrate **Stripe** for payment processing.
-- **Notifications and Chat**:
-  - Implement notifications for order updates and chat with customer service.
+---
+
+## Contributing
+
+1. Fork the repository.
+2. Create a new feature branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -m 'Add new feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a pull request.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+## Contact
+
+For inquiries or support, please contact [your-email@example.com].
