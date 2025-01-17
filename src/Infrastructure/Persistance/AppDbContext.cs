@@ -63,7 +63,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         builder.Entity<CartItem>(entity =>
         {
             entity.HasOne(ci => ci.Cart)
-                  .WithMany(c => c.CartItems)
+                  .WithMany(c => c.Items)
                   .HasForeignKey(ci => ci.CartId)
                   .OnDelete(DeleteBehavior.Cascade);
 
@@ -85,7 +85,6 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.Property(o => o.TotalAmount).HasColumnType("decimal(18,2)").IsRequired();
             entity.Property(o => o.Status).HasConversion<string>().IsRequired(); // Store enum as string
-            entity.Property(o => o.PaymentIntentId).HasMaxLength(100);
             entity.Property(o => o.CreatedAt).IsRequired();
             entity.Property(o => o.UpdatedAt).IsRequired();
         });

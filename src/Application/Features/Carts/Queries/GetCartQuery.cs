@@ -8,7 +8,7 @@ using Domain.Interfaces;
 
 using MediatR;
 
-namespace Application.Features.Cart.Queries;
+namespace Application.Features.Queries;
 
 public class GetCartQuery : IRequest<CartDto>
 {

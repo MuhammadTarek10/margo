@@ -1,4 +1,3 @@
-using Application.Featuers.Orders.Queries;
 using Application.Features.Commands;
 using Application.Features.Orders.Dtos;
 using Application.Features.Orders.Queries;
@@ -35,10 +34,9 @@ public class OrderController(IMediator mediator) : ControllerBase
     // POST: api/orders
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<Guid>> CreateOrder([FromBody] CreateOrderDto orderDto)
+    public async Task<ActionResult<Guid>> CreateOrder()
     {
-        var command = new CreateOrderCommand { OrderDto = orderDto };
-        var orderId = await mediator.Send(command);
+        var orderId = await mediator.Send(new CreateOrderCommand());
         return Ok(orderId);
     }
 

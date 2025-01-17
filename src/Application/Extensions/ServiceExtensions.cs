@@ -3,6 +3,8 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Application.Services.Validator;
+using Application.Services.Payment;
+using Application.Services.Payement;
 
 namespace Application.Extentions;
 
@@ -20,6 +22,7 @@ public static class ServiceCollectionExtensions
                   .AddFluentValidationAutoValidation();
 
         service.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        service.AddScoped<IPaymentService, StripePaymentGateway>();
 
         service.AddHttpContextAccessor();
     }

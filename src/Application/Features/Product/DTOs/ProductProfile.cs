@@ -1,8 +1,8 @@
 using AutoMapper;
 
-using Application.Featuers.Products.DTOs;
 using Domain.Entities;
 using Application.Features.DTOs;
+using Application.Features.Products.DTOs;
 
 
 public class ProductProfile : Profile

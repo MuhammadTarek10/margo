@@ -16,6 +16,7 @@ using Application.Services.Token;
 using Infrastructure.Services.Token;
 using Infrastructure.Services.Auth;
 using Application.Services.Auth;
+using Infrastructure.Seeders;
 
 namespace Infrastructure.Extensions;
 
@@ -59,6 +60,7 @@ public static class ServiceExtensions
         });
 
 
+        service.AddScoped<ISeeder, Seeder>();
         service.AddScoped<ITokenService, TokenService>();
         service.AddScoped<IUserContext, UserContext>();
         service.AddScoped<IProductRepository, ProductRepository>();

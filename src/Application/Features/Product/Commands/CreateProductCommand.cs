@@ -1,9 +1,8 @@
 using MediatR;
 using FluentValidation;
-
-using Application.Featuers.Products.DTOs;
 using Domain.Entities;
 using AutoMapper;
+using Application.Features.Products.DTOs;
 
 namespace Application.Features.Commands;
 
@@ -11,7 +10,6 @@ public class CreateProductCommand : IRequest<Guid>
 {
     public required CreateProductDto ProductDto { get; set; }
 }
-
 
 
 public class CreateProductCommandHandler(

@@ -4,8 +4,7 @@ using Application.Features.Auth.DTOs;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(
-    IMediator mediator) : ControllerBase
+public class AuthController(IMediator mediator) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)

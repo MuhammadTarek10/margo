@@ -11,6 +11,7 @@ public class CartItemDto
 {
     public Guid Id { get; set; }
     public required string ProductName { get; set; }
+    public required Guid ProductId { get; set; }
     public int Quantity { get; set; }
     public decimal Price { get; set; }
 }

@@ -26,7 +26,7 @@ public class LoginUserCommandHandler(
         }
 
         // Generate a JWT token
-        var token = tokenService.GenerateToken(user);
+        string token = tokenService.GenerateToken(user);
 
         return token;
     }

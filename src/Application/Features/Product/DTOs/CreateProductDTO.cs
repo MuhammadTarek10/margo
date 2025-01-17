@@ -1,4 +1,4 @@
-namespace Application.Featuers.Products.DTOs;
+namespace Application.Features.Products.DTOs;
 
 public class CreateProductDto
 {

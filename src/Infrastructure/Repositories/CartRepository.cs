@@ -13,7 +13,7 @@ internal class CartRepository(AppDbContext context) : ICartRepository
     public async Task<Cart?> GetCartByUserIdAsync(Guid userId)
     {
         var cart = await context.Carts
-            .Include(c => c.CartItems)
+            .Include(c => c.Items)
             .ThenInclude(ci => ci.Product)
             .FirstOrDefaultAsync(c => c.UserId == userId);
 
@@ -44,10 +44,19 @@ internal class CartRepository(AppDbContext context) : ICartRepository
         var cart = await context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
         if (cart is null) throw new NotFoundException(nameof(Cart), userId.ToString());
 
-        var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+        var cartItem = cart.Items.FirstOrDefault(ci => ci.ProductId == productId);
         if (cartItem is null) throw new NotFoundException(nameof(CartItem), productId.ToString());
 
-        cart.CartItems.Remove(cartItem);
+        cart.Items.Remove(cartItem);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task ClearCartAsync(Guid userId)
+    {
+        var cart = await context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+        if (cart is null) throw new NotFoundException(nameof(Cart), userId.ToString());
+
+        context.Carts.Remove(cart);
         await context.SaveChangesAsync();
     }
 }

@@ -1,7 +1,6 @@
-using Application.Featuers.Commands;
-using Application.Features.Cart.Queries;
 using Application.Features.Commands;
 using Application.Features.DTOs;
+using Application.Features.Queries;
 
 using MediatR;
 
@@ -10,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/cart")]
 public class CartController(IMediator mediator) : ControllerBase
 {
 
     // GET: api/cart
-    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetCart()
     {
@@ -25,20 +24,20 @@ public class CartController(IMediator mediator) : ControllerBase
     }
 
     // POST: api/cart/add-product
-    [Authorize]
     [HttpPost("add-product")]
     public async Task<IActionResult> AddItem([FromBody] AddToCartDto dto)
     {
-        var result = await mediator.Send(new AddProductToCartCommand { CartDto = dto });
-        return Ok(new { ItemId = result });
+        Guid result = await mediator.Send(new AddProductToCartCommand { CartDto = dto });
+        return Ok(new { result });
     }
 
     // DELETE: api/cart/remove-product
-    [Authorize]
     [HttpDelete("remove-product")]
     public async Task<IActionResult> RemoveItem([FromBody] Guid productId)
     {
         await mediator.Send(new RemoveProductFromCartCommand { ProductId = productId });
         return NoContent();
     }
+
+
 }

@@ -6,8 +6,9 @@ using Domain.Interfaces;
 
 using MediatR;
 using Application.Services.Auth;
+using Domain.Entities;
 
-namespace Application.Featuers.Orders.Queries;
+namespace Application.Features.Orders.Queries;
 
 
 public class GetMyOrdersQuery : IRequest<List<OrderDto>>
@@ -23,7 +24,8 @@ public class GetMyOrdersQueryHandler(
     {
 
         Guid userId = userContext.UserId;
-        var orders = await orderRepository.GetOrdersByUserIdAsync(userId);
+        List<Order> orders = await orderRepository.GetOrdersByUserIdAsync(userId);
+
         return mapper.Map<List<OrderDto>>(orders);
     }
 }

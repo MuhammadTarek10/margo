@@ -7,7 +7,7 @@ using Domain.Interfaces;
 
 using MediatR;
 
-namespace Application.Featuers.Commands;
+namespace Application.Features.Commands;
 
 public class AddProductToCartCommand : IRequest<Guid>
 {
@@ -35,7 +35,7 @@ public class AddProductToCartCommandHandler(
             await cartRepository.AddAsync(cart);
         }
 
-        var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == request.CartDto.ProductId);
+        var cartItem = cart.Items.FirstOrDefault(ci => ci.ProductId == request.CartDto.ProductId);
         if (cartItem is null)
         {
             cartItem = new CartItem
@@ -44,7 +44,7 @@ public class AddProductToCartCommandHandler(
                 ProductId = request.CartDto.ProductId,
                 Quantity = request.CartDto.Quantity
             };
-            cart.CartItems.Add(cartItem);
+            cart.Items.Add(cartItem);
         }
         else
         {

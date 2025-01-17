@@ -1,4 +1,4 @@
-using Application.Featuers.Products.DTOs;
+using Application.Features.Products.DTOs;
 
 using AutoMapper;
 

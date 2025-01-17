@@ -16,10 +16,7 @@ public class Order
     public decimal TotalAmount { get; set; }
 
     [Required]
-    public OrderStatus Status { get; set; } // e.g., "Pending", "Paid", "Shipped", "Delivered", "Cancelled"
-
-    [MaxLength(100)]
-    public string? PaymentIntentId { get; set; } // Stripe Payment Intent ID
+    public OrderStatus Status { get; set; } = OrderStatus.Pending; // Default to Pending
 
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -27,19 +24,52 @@ public class Order
     [Required]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+    // Payment-related fields
+    public PaymentMethod Method { get; set; } // e.g., CashOnDelivery, Card, Stripe, PayPal
+
+
+    [StringLength(100)]
+    public string? TransactionId { get; set; } // Gateway-specific transaction ID (e.g., Stripe charge ID)
+
+    [Column(TypeName = "jsonb")]
+    public string? PaymentDetails { get; set; } // Store gateway-specific details as JSON
+
+    // Navigation properties
     [ForeignKey(nameof(UserId))]
     public User? User { get; set; }
 
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
 
-
     public enum OrderStatus
     {
         Pending,    // Order is created but payment is not yet completed
         Paid,       // Payment is completed
+        Failed,     // Payment failed
         Shipped,    // Order has been shipped
         Delivered,  // Order has been delivered to the customer
         Cancelled   // Order has been cancelled
+    }
+
+    public enum PaymentMethod
+    {
+        CashOnDelivery,
+        Card,
+    }
+
+
+    public string GetPaymentMethodDescription()
+    {
+        return Method switch
+        {
+            PaymentMethod.CashOnDelivery => "Cash on Delivery",
+            PaymentMethod.Card => "Card Payment",
+            _ => "Unknown"
+        };
+    }
+
+    public override string ToString()
+    {
+        return $"Order ID: {Id}, Total Amount: {TotalAmount}, Status: {Status}, Payment Method: {GetPaymentMethodDescription()}";
     }
 }
 
@@ -65,6 +95,16 @@ public class OrderItem
     // Navigation properties
     [ForeignKey(nameof(OrderId))]
     public Order? Order { get; set; }
+
     [ForeignKey(nameof(ProductId))]
     public Product? Product { get; set; }
+}
+
+
+public class PaymentResult
+{
+    public bool Success { get; set; }
+    public string? TransactionId { get; set; }
+    public string? PaymentDetails { get; set; }
+    public string? ErrorMessage { get; set; }
 }

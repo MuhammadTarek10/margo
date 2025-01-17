@@ -1,19 +1,22 @@
-using Application.Featuers.Products.DTOs;
-using Application.Features.Commands;
-using Application.Features.DTOs;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Features.Products.DTOs;
+using Application.Features.Commands;
+using Application.Features.DTOs;
+
 
 namespace Api.Controllers;
 
+
+[Authorize(Roles = Roles.Admin)]
 [ApiController]
 [Route("api/products")]
 public class ProductsController(IMediator mediator) : ControllerBase
 {
     // GET: api/products
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAllProducts()
     {
@@ -23,7 +26,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // GET: api/products/{id}
-    [Authorize]
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {
@@ -33,7 +36,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // GET: api/products/category/{category}
-    [Authorize]
+    [AllowAnonymous]
     [HttpGet("category/{category}")]
     public async Task<IActionResult> GetProductsByCategory(string category)
     {
@@ -43,7 +46,6 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // POST: api/products
-    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
     {
@@ -54,7 +56,6 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // PUT: api/products/{id}
-    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductDto productDto)
     {
@@ -73,7 +74,6 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     // DELETE: api/products/{id}
-    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(Guid id)
     {

@@ -8,4 +8,5 @@ public interface ICartRepository
     Task AddAsync(Cart cart);
     Task UpdateAsync(Cart cart);
     Task RemoveProductFromCartAsync(Guid userId, Guid productId);
+    Task ClearCartAsync(Guid userId);
 }

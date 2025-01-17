@@ -2,6 +2,7 @@ using Api.Middlewares;
 using Infrastructure.Extensions;
 using Application.Extentions;
 using Api.Extensions;
+using Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
+
+await seeder.Seed();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 
