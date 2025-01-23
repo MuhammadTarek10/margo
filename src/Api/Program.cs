@@ -3,6 +3,7 @@ using Infrastructure.Extensions;
 using Application.Extentions;
 using Api.Extensions;
 using Infrastructure.Seeders;
+using Application.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// app.UseEndpoints(opts => opts.MapHub<ChatHub>("/chat"));
 
 app.MapControllers();
 

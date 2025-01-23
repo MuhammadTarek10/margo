@@ -1,14 +1,30 @@
 
+using Application.Services.Auth;
+
 using Domain.Entities;
 using Domain.Interfaces;
 
+using Infrastructure.Persistance;
+
+using Microsoft.EntityFrameworkCore;
+
 namespace Infrastructure.Repositories;
 
-internal class ChatRepository : IChatRepository
+internal class ChatRepository(
+    AppDbContext context,
+    IUserContext userContext) : IChatRepository
 {
-    public Task<Chat> CreateChatAsync(Chat chat)
+    public async Task<Chat> CreateChatAsync(Guid userId)
     {
-        throw new NotImplementedException();
+        Guid agentId = userContext.AvailableAgent;
+
+        Console.WriteLine(agentId);
+
+        Chat chat = new Chat { UserId = userId, AgentId = agentId };
+        await context.Chats.AddAsync(chat);
+
+        await context.SaveChangesAsync();
+        return chat;
     }
 
     public Task<Chat> DeleteChatAsync(Guid id)
@@ -21,9 +37,14 @@ internal class ChatRepository : IChatRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Chat>> GetChatsAsync()
+    public async Task<List<Chat>> GetChatsAsync(Guid userId)
     {
-        throw new NotImplementedException();
+        Console.WriteLine(userId);
+        return await context.Chats
+            .Where(c => c.UserId == userId || c.AgentId == userId)
+            .Include(c => c.User)
+            .Include(c => c.Agent)
+            .ToListAsync();
     }
 
     public Task<Chat> SendMessageAsync(Guid chatId, Message message)

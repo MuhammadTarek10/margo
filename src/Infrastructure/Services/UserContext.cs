@@ -17,6 +17,8 @@ internal class UserContext(IHttpContextAccessor http, UserManager<User> userMana
 
     public List<NotificationData>? Admins => GetAdmins().Result;
 
+    public Guid AvailableAgent => GetAvailableAgent().Result;
+
     private async Task<List<NotificationData>> GetAdmins()
     {
         var admins = await userManager.GetUsersInRoleAsync(Roles.Admin);
@@ -26,4 +28,14 @@ internal class UserContext(IHttpContextAccessor http, UserManager<User> userMana
             user.Email!)).Where(user => user.email is not null)
             .ToList();
     }
+
+    private async Task<Guid> GetAvailableAgent()
+    {
+        var agents = await userManager.GetUsersInRoleAsync(Roles.Agent);
+
+        if (agents.Count == 0) throw new Exception("No agents available");
+
+        return agents[new Random().Next(0, agents.Count)].Id;
+    }
+
 }

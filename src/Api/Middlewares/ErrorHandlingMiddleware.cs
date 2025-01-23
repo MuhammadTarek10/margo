@@ -50,7 +50,7 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : 
             await context.Response.WriteAsJsonAsync(
                     new ErrorResponse(
                         code: StatusCodes.Status500InternalServerError,
-                        message: "Something went wrong"));
+                        message: $"Something went wrong [{ex.Message}]"));
             logger.LogError(ex.Message);
         }
     }
