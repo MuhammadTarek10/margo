@@ -2,6 +2,7 @@
 using Application.Services.Auth;
 
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Interfaces;
 
 using Infrastructure.Persistance;
@@ -18,7 +19,6 @@ internal class ChatRepository(
     {
         Guid agentId = userContext.AvailableAgent;
 
-        Console.WriteLine(agentId);
 
         Chat chat = new Chat { UserId = userId, AgentId = agentId };
         await context.Chats.AddAsync(chat);
@@ -32,24 +32,33 @@ internal class ChatRepository(
         throw new NotImplementedException();
     }
 
-    public Task<Chat> GetChatAsync(Guid id)
+    public async Task<Chat> GetChatAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await context.Chats
+            .Where(c => c.Id == id)
+            .Include(c => c.User)
+            .Include(c => c.Agent)
+            .Include(c => c.Messages)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Chat), id.ToString());
     }
 
     public async Task<List<Chat>> GetChatsAsync(Guid userId)
     {
-        Console.WriteLine(userId);
         return await context.Chats
             .Where(c => c.UserId == userId || c.AgentId == userId)
             .Include(c => c.User)
             .Include(c => c.Agent)
+            .Include(c => c.Messages)
             .ToListAsync();
     }
 
-    public Task<Chat> SendMessageAsync(Guid chatId, Message message)
+    public async Task<Chat> SendMessageAsync(Guid chatId, Message message)
     {
-        throw new NotImplementedException();
+
+        await context.Messages.AddAsync(message);
+
+        await context.SaveChangesAsync();
+        return await GetChatAsync(chatId);
     }
 
     public Task<Chat> UpdateChatAsync(Chat chat)

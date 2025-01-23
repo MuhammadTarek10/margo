@@ -34,7 +34,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// app.UseEndpoints(opts => opts.MapHub<ChatHub>("/chat"));
+app.MapHub<ChatHub>("/chats");
 
 app.MapControllers();
 

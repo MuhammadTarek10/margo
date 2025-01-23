@@ -17,6 +17,7 @@ using Infrastructure.Services.Token;
 using Infrastructure.Services.Auth;
 using Application.Services.Auth;
 using Infrastructure.Seeders;
+using Application.Features;
 
 namespace Infrastructure.Extensions;
 

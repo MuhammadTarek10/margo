@@ -43,6 +43,9 @@ public class Message
     public Guid SenderId { get; set; }
 
     [Required]
+    public Guid RecieverId { get; set; }
+
+    [Required]
     public required string Content { get; set; }
 
     [Required]

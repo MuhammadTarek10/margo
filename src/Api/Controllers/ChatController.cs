@@ -26,4 +26,16 @@ public class ChatController(IMediator mediator) : ControllerBase
         ChatDto dto = await mediator.Send(new CreateChatCommand());
         return Ok(dto);
     }
+
+    [HttpPost]
+    [Route("{chatId}/message")]
+    public async Task<IActionResult> SendMessage(Guid chatId, [FromBody] MessageDto messageDto)
+    {
+        messageDto.ChatId = chatId;
+
+        ChatDto dto = await mediator.Send(new SendMessageCommand { Dto = messageDto });
+
+        return Ok(dto);
+
+    }
 }
