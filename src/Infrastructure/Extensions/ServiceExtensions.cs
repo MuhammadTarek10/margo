@@ -67,6 +67,7 @@ public static class ServiceExtensions
         service.AddScoped<IOrderRepository, OrderRepository>();
         service.AddScoped<ICartRepository, CartRepository>();
         service.AddScoped<INotificationRepository, NotificationRepository>();
+        service.AddScoped<IChatRepository, ChatRepository>();
     }
 
 }

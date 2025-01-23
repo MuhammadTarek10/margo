@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Domain.Constants;
+
 namespace Domain.Entities;
 
 public class Order
@@ -39,22 +41,6 @@ public class Order
     public User? User { get; set; }
 
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
-
-    public enum OrderStatus
-    {
-        Pending,    // Order is created but payment is not yet completed
-        Paid,       // Payment is completed
-        Failed,     // Payment failed
-        Shipped,    // Order has been shipped
-        Delivered,  // Order has been delivered to the customer
-        Cancelled   // Order has been cancelled
-    }
-
-    public enum PaymentMethod
-    {
-        CashOnDelivery,
-        Card,
-    }
 
 
     public string GetPaymentMethodDescription()

@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         var assembly = typeof(ServiceCollectionExtensions).Assembly;
 
         service.AddAutoMapper(assembly);
+        service.AddSignalR();
 
         service.AddValidatorsFromAssembly(assembly)
                   .AddFluentValidationAutoValidation();

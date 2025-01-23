@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
@@ -22,6 +23,5 @@ public class User : IdentityUser<Guid>
     public ICollection<Cart> Carts { get; set; } = new List<Cart>();
     public ICollection<Order> Orders { get; set; } = new List<Order>();
     public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-    public ICollection<ChatMessage> SentMessages { get; set; } = new List<ChatMessage>();
-    public ICollection<ChatMessage> ReceivedMessages { get; set; } = new List<ChatMessage>();
+    public ICollection<Chat> Chats { get; set; } = new List<Chat>();
 }

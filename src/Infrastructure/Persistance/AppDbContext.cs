@@ -13,14 +13,15 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     }
 
     // DbSet properties for your entities
-    public DbSet<Product> Products { get; set; } = default!;
-    public DbSet<Order> Orders { get; set; } = default!;
-    public DbSet<OrderItem> OrderItems { get; set; } = default!;
-    public DbSet<Cart> Carts { get; set; } = default!;
-    public DbSet<CartItem> CartItems { get; set; } = default!;
-    public DbSet<Notification> Notifications { get; set; } = default!;
-    public DbSet<ChatMessage> ChatMessages { get; set; } = default!;
-    public DbSet<Analytics> Analytics { get; set; } = default!;
+    internal DbSet<Product> Products { get; set; } = default!;
+    internal DbSet<Order> Orders { get; set; } = default!;
+    internal DbSet<OrderItem> OrderItems { get; set; } = default!;
+    internal DbSet<Cart> Carts { get; set; } = default!;
+    internal DbSet<CartItem> CartItems { get; set; } = default!;
+    internal DbSet<Notification> Notifications { get; set; } = default!;
+    internal DbSet<Chat> Chats { get; set; } = default!;
+    internal DbSet<Message> Messages { get; set; } = default!;
+    internal DbSet<Analytics> Analytics { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -119,22 +120,21 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(n => n.CreatedAt).IsRequired();
         });
 
-        // Configure the ChatMessage entity
-        builder.Entity<ChatMessage>(entity =>
+        // Configure the Chat entity
+        builder.Entity<Chat>(entity =>
         {
-            entity.HasOne(cm => cm.User)
-                  .WithMany(u => u.SentMessages)
-                  .HasForeignKey(cm => cm.UserId)
-                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(c => c.User)
+                  .WithMany(u => u.Chats)
+                  .HasForeignKey(c => c.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
 
-            entity.HasOne(cm => cm.Agent)
-                  .WithMany(u => u.ReceivedMessages)
-                  .HasForeignKey(cm => cm.AgentId)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            entity.Property(cm => cm.Message).HasMaxLength(1000).IsRequired();
-            entity.Property(cm => cm.IsFromUser).IsRequired();
-            entity.Property(cm => cm.CreatedAt).IsRequired();
+        builder.Entity<Message>(entity =>
+        {
+            entity.HasOne(m => m.Chat)
+                  .WithMany(c => c.Messages)
+                  .HasForeignKey(m => m.ChatId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Configure the Analytics entity

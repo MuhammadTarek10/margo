@@ -1,5 +1,4 @@
-using static Domain.Entities.Order;
-
+using Domain.Constants;
 namespace Application.Features.Orders.Dtos;
 
 public class OrderDto

@@ -6,6 +6,7 @@ using Application.Services.Auth;
 using Domain.Exceptions;
 using Application.Services.Payement;
 using Application.Events.Notifications;
+using Domain.Constants;
 
 namespace Application.Features.Commands;
 
@@ -35,11 +36,11 @@ public class CreateOrderCommandHandler(
         if (cart.Items.Count == 0) throw new BadRequestException("Cart is empty");
 
         Order order = mapper.Map<Order>(cart);
-        order.Status = Order.OrderStatus.Pending;
+        order.Status = OrderStatus.Pending;
 
         PaymentResult result = await paymentService.ProcessPaymentAsync(order.TotalAmount, "egp", $"Order {order.Id}", email);
 
-        order.Status = result.Success ? Order.OrderStatus.Paid : Order.OrderStatus.Failed;
+        order.Status = result.Success ? OrderStatus.Paid : OrderStatus.Failed;
         order.TransactionId = result.TransactionId;
         order.PaymentDetails = result.Success ? "Stripe payment successful" : result.ErrorMessage;
 
@@ -54,7 +55,7 @@ public class CreateOrderCommandHandler(
             }
         }
 
-        order.Status = result.Success ? Order.OrderStatus.Paid : Order.OrderStatus.Failed;
+        order.Status = result.Success ? OrderStatus.Paid : OrderStatus.Failed;
 
         await orderRepository.AddAsync(order);
 

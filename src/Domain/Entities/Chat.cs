@@ -3,31 +3,52 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-
-public class ChatMessage
+public class Chat
 {
     [Key]
     public Guid Id { get; set; }
 
     [Required]
-    [ForeignKey(nameof(User))]
     public Guid UserId { get; set; }
 
     [Required]
-    [ForeignKey(nameof(Agent))]
     public Guid AgentId { get; set; }
-
-    [Required]
-    [MaxLength(1000)]
-    public required string Message { get; set; }
-
-    [Required]
-    public bool IsFromUser { get; set; } // True if the message is from the user, false if from the agent
 
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    [Required]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
     // Navigation properties
-    public required User User { get; set; }
-    public required User Agent { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User? User { get; set; }
+
+    [ForeignKey(nameof(AgentId))]
+    public User? Agent { get; set; }
+
+    public ICollection<Message> Messages { get; set; } = new List<Message>();
+}
+
+
+public class Message
+{
+    [Key]
+    public Guid Id { get; set; }
+
+    [Required]
+    public Guid ChatId { get; set; }
+
+    [Required]
+    public Guid SenderId { get; set; }
+
+    [Required]
+    public required string Content { get; set; }
+
+    [Required]
+    public DateTime SentAt { get; set; } = DateTime.UtcNow;
+
+    // Navigation property
+    [ForeignKey(nameof(ChatId))]
+    public Chat? Chat { get; set; }
 }

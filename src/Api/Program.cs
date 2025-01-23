@@ -6,7 +6,6 @@ using Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.AddPresentation();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -22,8 +21,6 @@ var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
 await seeder.Seed();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -35,6 +32,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 
