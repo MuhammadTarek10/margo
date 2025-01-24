@@ -10,6 +10,7 @@ public interface IUserContext
     List<NotificationData>? Admins { get; }
 
     Guid AvailableAgent { get; }
+
 }
 
 public record NotificationData(Guid id, string email);

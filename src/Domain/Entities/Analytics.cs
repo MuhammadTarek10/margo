@@ -18,7 +18,19 @@ public class Analytics
 
     [Required]
     [Range(0, int.MaxValue)]
+    public int TotalProducts { get; set; }
+
+    [Required]
+    [Range(0, int.MaxValue)]
     public int TotalUsers { get; set; }
+
+    [Required]
+    [Range(0, int.MaxValue)]
+    public decimal TotalRevenue { get; set; }
+
+    [Required]
+    [Range(0, int.MaxValue)]
+    public int TotalProfit { get; set; }
 
     [Required]
     [ForeignKey(nameof(Product))]

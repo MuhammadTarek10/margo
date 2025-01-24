@@ -8,23 +8,38 @@ using Application.Services.Token;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services.Token;
 
-internal class TokenService(IConfiguration configuration) : ITokenService
+internal class TokenService(IConfiguration configuration, UserManager<User> userManager) : ITokenService
 {
-    public string GenerateToken(User user)
+
+    public async Task<string> GenerateToken(User user)
     {
         var jwtSettings = configuration.GetSection("JwtSettings");
         var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
 
+        // Fetch the user's roles
+        var roles = await userManager.GetRolesAsync(user);
+
+        // Create a list of claims
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email!)
+        };
+
+        // Add role claims
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        // Create the token descriptor
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email!),
-            }),
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpiryInMinutes"]!)),
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),

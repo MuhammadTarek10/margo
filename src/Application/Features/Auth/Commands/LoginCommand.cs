@@ -16,17 +16,14 @@ public class LoginUserCommandHandler(
 {
     public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        // Find the user by email
         var user = await userManager.FindByEmailAsync(request.LoginDto.Email);
 
-        // Check if the user exists and the password is correct
         if (user == null || !await userManager.CheckPasswordAsync(user, request.LoginDto.Password))
         {
             throw new AuthException("Invalid email or password.");
         }
 
-        // Generate a JWT token
-        string token = tokenService.GenerateToken(user);
+        string token = await tokenService.GenerateToken(user);
 
         return token;
     }

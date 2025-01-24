@@ -11,8 +11,8 @@ namespace Api.Controllers;
 
 
 
-[Authorize(Roles = Roles.Admin)]
 [ApiController]
+[Authorize(Roles = Roles.Admin)]
 [Route("api/products")]
 public class ProductsController(IMediator mediator, ILogger<ProductsController> logger) : ControllerBase
 {

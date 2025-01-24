@@ -18,6 +18,7 @@ using Infrastructure.Services.Auth;
 using Application.Services.Auth;
 using Infrastructure.Seeders;
 using Application.Features;
+using Infrastructure.Services.Workers;
 
 namespace Infrastructure.Extensions;
 
@@ -60,7 +61,6 @@ public static class ServiceExtensions
 
         });
 
-
         service.AddScoped<ISeeder, Seeder>();
         service.AddScoped<ITokenService, TokenService>();
         service.AddScoped<IUserContext, UserContext>();
@@ -69,6 +69,9 @@ public static class ServiceExtensions
         service.AddScoped<ICartRepository, CartRepository>();
         service.AddScoped<INotificationRepository, NotificationRepository>();
         service.AddScoped<IChatRepository, ChatRepository>();
+        service.AddScoped<IDashboardRepository, DashboardRepository>();
+        service.AddHostedService<AnalyticsWorker>();
+        service.AddHostedService<LowStockNotifierWorker>();
     }
 
 }

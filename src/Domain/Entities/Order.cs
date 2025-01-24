@@ -95,10 +95,10 @@ public class OrderItem
 
     // Navigation properties
     [ForeignKey(nameof(OrderId))]
-    public Order? Order { get; set; }
+    public required Order Order { get; set; }
 
     [ForeignKey(nameof(ProductId))]
-    public Product? Product { get; set; }
+    public required Product Product { get; set; }
 }
 
 

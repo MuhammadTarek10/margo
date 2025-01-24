@@ -9,24 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/orders")]
-public class OrderController(IMediator mediator, ILogger<OrderController> logger) : ControllerBase
+public class OrderController(IMediator mediator) : ControllerBase
 {
     // GET: api/orders
     [Authorize(Roles = Roles.Admin)]
     [HttpGet]
     public async Task<IActionResult> GetAllOrders()
     {
-        try
-        {
-            var query = new GetAllOrdersQuery();
-            var orders = await mediator.Send(query);
-            return Ok(new { success = true, data = orders });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error retrieving all orders");
-            return StatusCode(500, new { success = false, message = "An error occurred while retrieving orders." });
-        }
+
+        var query = new GetAllOrdersQuery();
+        var orders = await mediator.Send(query);
+        return Ok(new { success = true, data = orders });
     }
 
     // GET: api/orders/{id}
@@ -34,20 +27,13 @@ public class OrderController(IMediator mediator, ILogger<OrderController> logger
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOrderById(Guid id)
     {
-        try
-        {
-            var query = new GetOrderByIdQuery { OrderId = id };
-            var order = await mediator.Send(query);
-            if (order == null)
-                return NotFound(new { success = false, message = "Order not found." });
 
-            return Ok(new { success = true, data = order });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"Error retrieving order with ID {id}");
-            return StatusCode(500, new { success = false, message = "An error occurred while retrieving the order." });
-        }
+        var query = new GetOrderByIdQuery { OrderId = id };
+        var order = await mediator.Send(query);
+
+        if (order == null) return NotFound(new { success = false, message = "Order not found." });
+
+        return Ok(new { success = true, data = order });
     }
 
     // POST: api/orders
@@ -55,17 +41,9 @@ public class OrderController(IMediator mediator, ILogger<OrderController> logger
     [HttpPost]
     public async Task<IActionResult> CreateOrder()
     {
-        try
-        {
-            var orderId = await mediator.Send(new CreateOrderCommand());
-            return Ok(new { success = true, data = orderId });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error creating order");
-            var value = new { success = false, message = $"An error occurred while creating the order: [{ex.Message}]." };
-            return StatusCode(500, value);
-        }
+
+        var orderId = await mediator.Send(new CreateOrderCommand());
+        return Ok(new { success = true, data = orderId });
     }
 
     // GET: api/orders/mine
@@ -73,18 +51,10 @@ public class OrderController(IMediator mediator, ILogger<OrderController> logger
     [HttpGet("mine")]
     public async Task<IActionResult> GetMyOrders()
     {
-        try
-        {
-            var query = new GetMyOrdersQuery();
-            var orders = await mediator.Send(query);
-            return Ok(new { success = true, data = orders });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error retrieving user's orders");
-            var value = new { success = false, message = $"An error occurred while retrieving your orders: [{ex.Message}]." };
-            return StatusCode(500, value);
-        }
+
+        var query = new GetMyOrdersQuery();
+        var orders = await mediator.Send(query);
+        return Ok(new { success = true, data = orders });
     }
 
     // DELETE: api/orders/{id}
@@ -92,17 +62,8 @@ public class OrderController(IMediator mediator, ILogger<OrderController> logger
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOrder(Guid id)
     {
-        try
-        {
-            var command = new DeleteOrderCommand { OrderId = id };
-            await mediator.Send(command);
-            return Ok(new { success = true, message = "Order deleted successfully." });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"Error deleting order with ID {id}");
-            var value = new { success = false, message = $"An error occurred while deleting the order: [{ex.Message}]." };
-            return StatusCode(500, new { success = false, value });
-        }
+        var command = new DeleteOrderCommand { OrderId = id };
+        await mediator.Send(command);
+        return Ok(new { success = true, message = "Order deleted successfully." });
     }
 }
