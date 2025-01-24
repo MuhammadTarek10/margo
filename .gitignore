@@ -483,6 +483,8 @@ $RECYCLE.BIN/
 
 # Dataabse Temp files
 *.db~
+*.db-shm
+*.db-wal
 
 # json
 appsettings.json
