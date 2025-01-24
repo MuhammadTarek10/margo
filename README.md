@@ -1,4 +1,4 @@
-# Margo E-Commerce API
+# Margo
 
 ## Overview
 
@@ -134,11 +134,17 @@ Margo
 - `PUT /api/products/{id}` - Update a product (admin only).
 - `DELETE /api/products/{id}` - Delete a product (admin only).
 
+### Chat
+
+- `GET /api/chat` - Get all chats for the logged-in user.
+- `POST /api/chat` - Create a new chat session.
+- `POST /api/chat/{chatId}/message` - Send a message in a specific chat.
+
 ---
 
 ## Prerequisites
 
-- .NET 7.0 SDK
+- .NET 9.0 SDK
 - SQLite
 - Node.js (for real-time features and frontend integration)
 - Docker (for containerization, optional)
@@ -204,12 +210,3 @@ dotnet test
   - Notify users in real-time about the status of their orders (e.g., confirmed, shipped, delivered).
 - **Admin Alerts**:
   - Send notifications to admins about low stock, new orders, and system updates.
-
-### **Chat System**
-
-- **Customer Service Chat**:
-  - Implement a live chat system to enable users to contact customer service for inquiries or support.
-- **Admin-User Messaging**:
-  - Allow admins to respond to user messages through the admin dashboard.
-- **Chat History**:
-  - Maintain a log of chat conversations for reference and analysis.

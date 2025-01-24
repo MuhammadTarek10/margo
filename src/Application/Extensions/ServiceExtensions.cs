@@ -8,6 +8,7 @@ using Application.Services.Payement;
 using Application.Services.Email;
 using Application.Services.Notifications;
 using Application.Events.Notifications;
+using Application.Services.Chat;
 
 namespace Application.Extentions;
 
@@ -28,6 +29,7 @@ public static class ServiceCollectionExtensions
         service.AddScoped<IEmailService, EmailService>();
         service.AddScoped<INotificationService, NotificationService>();
         service.AddTransient<INotificationHandler<OrderCreatedEvent>, OrderCreatedEventHandler>();
+        service.AddScoped<IChatService, ChatService>();
 
 
         service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));

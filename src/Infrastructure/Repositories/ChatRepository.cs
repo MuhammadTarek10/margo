@@ -19,7 +19,6 @@ internal class ChatRepository(
     {
         Guid agentId = userContext.AvailableAgent;
 
-
         Chat chat = new Chat { UserId = userId, AgentId = agentId };
         await context.Chats.AddAsync(chat);
 
