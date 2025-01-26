@@ -12,7 +12,7 @@ public class DashboardController(IMediator mediator) : ControllerBase
 
 {
     [Authorize(Roles = Roles.Admin)]
-    [HttpGet("analytics")]
+    [HttpGet]
     public async Task<IActionResult> GetAnalytics()
     {
         var analytics = await mediator.Send(new GetAnalyticsQuery());

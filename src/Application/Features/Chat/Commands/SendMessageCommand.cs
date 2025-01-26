@@ -40,7 +40,10 @@ public class SendMessageCommandHandler(
 
         ChatDto chatDto = mapper.Map<ChatDto>(chat);
 
-        await chatService.SendChatMessage(request.Dto.RecieverId.ToString(), request.Dto.Content);
+        await chatService.SendChatMessage(
+            chat.Id.ToString(),
+            request.Dto.RecieverId.ToString(),
+            request.Dto.Content);
 
         return chatDto;
     }

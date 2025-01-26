@@ -73,7 +73,7 @@ public class AnalyticsWorker(
             analytics = new Analytics
             {
                 Id = Guid.NewGuid(),
-                Date = startDate,
+                Date = date,
                 TotalSales = totalSales,
                 TotalOrders = totalOrders,
                 TotalProducts = totalProducts,

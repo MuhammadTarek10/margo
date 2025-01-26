@@ -14,24 +14,26 @@ namespace Api.Controllers;
 [ApiController]
 [Authorize(Roles = Roles.Admin)]
 [Route("api/products")]
-public class ProductsController(IMediator mediator, ILogger<ProductsController> logger) : ControllerBase
+public class ProductsController(IMediator mediator) : ControllerBase
 {
     // GET: api/products
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> GetAllProducts()
+    public async Task<IActionResult> GetAllProducts(
+        [FromQuery] string? category,
+        [FromQuery] bool? stock,
+        [FromQuery] decimal? lowerPrice,
+        [FromQuery] decimal? higherPrice)
     {
-        try
+        var query = new GetAllProductsQuery
         {
-            var query = new GetAllProductsQuery();
-            var products = await mediator.Send(query);
-            return Ok(new { success = true, data = products });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error retrieving all products");
-            return StatusCode(500, new { success = false, message = "An error occurred while retrieving products." });
-        }
+            category = category,
+            stock = stock,
+            lowerPrice = lowerPrice,
+            higherPrice = higherPrice
+        };
+        var products = await mediator.Send(query);
+        return Ok(new { success = true, data = products });
     }
 
     // GET: api/products/{id}
@@ -39,103 +41,53 @@ public class ProductsController(IMediator mediator, ILogger<ProductsController> 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {
-        try
-        {
-            var query = new GetProductByIdQuery { Id = id };
-            var product = await mediator.Send(query);
-            if (product == null)
-                return NotFound(new { success = false, message = "Product not found." });
+        var query = new GetProductByIdQuery { Id = id };
+        var product = await mediator.Send(query);
+        if (product == null)
+            return NotFound(new { success = false, message = "Product not found." });
 
-            return Ok(new { success = true, data = product });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"Error retrieving product with ID {id}");
-            return StatusCode(500, new { success = false, message = "An error occurred while retrieving the product." });
-        }
+        return Ok(new { success = true, data = product });
     }
 
-    // GET: api/products/category/{category}
-    [AllowAnonymous]
-    [HttpGet("category/{category}")]
-    public async Task<IActionResult> GetProductsByCategory(string category)
-    {
-        try
-        {
-            var query = new GetProductsByCategoryQuery { Category = category };
-            var products = await mediator.Send(query);
-            return Ok(new { success = true, data = products });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"Error retrieving products in category {category}");
-            return StatusCode(500, new { success = false, message = "An error occurred while retrieving products." });
-        }
-    }
 
     // POST: api/products
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
     {
-        try
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Invalid product data." });
+        if (!ModelState.IsValid) return BadRequest(new { success = false, message = "Invalid product data." });
 
-            var command = new CreateProductCommand { ProductDto = productDto };
-            var productId = await mediator.Send(command);
-            return Ok(new { success = true, data = productId });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error creating product");
-            return StatusCode(500, new { success = false, message = "An error occurred while creating the product." });
-        }
+        var command = new CreateProductCommand { ProductDto = productDto };
+        var productId = await mediator.Send(command);
+        return Ok(new { success = true, data = productId });
     }
 
     // PUT: api/products/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductDto productDto)
     {
-        try
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Invalid product data." });
+        if (!ModelState.IsValid)
+            return BadRequest(new { success = false, message = "Invalid product data." });
 
-            var command = new UpdateProductCommand
-            {
-                Id = id,
-                Name = productDto.Name,
-                Description = productDto.Description,
-                Price = productDto.Price,
-                Stock = productDto.Stock,
-                Category = productDto.Category
-            };
-
-            await mediator.Send(command);
-            return NoContent();
-        }
-        catch (Exception ex)
+        var command = new UpdateProductCommand
         {
-            logger.LogError(ex, $"Error updating product with ID {id}");
-            return StatusCode(500, new { success = false, message = "An error occurred while updating the product." });
-        }
+            Id = id,
+            Name = productDto.Name,
+            Description = productDto.Description,
+            Price = productDto.Price,
+            Stock = productDto.Stock,
+            Category = productDto.Category
+        };
+
+        await mediator.Send(command);
+        return NoContent();
     }
 
     // DELETE: api/products/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(Guid id)
     {
-        try
-        {
-            var command = new DeleteProductCommand { Id = id };
-            await mediator.Send(command);
-            return Ok(new { success = true, message = "Product deleted successfully." });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"Error deleting product with ID {id}");
-            return StatusCode(500, new { success = false, message = "An error occurred while deleting the product." });
-        }
+        var command = new DeleteProductCommand { Id = id };
+        await mediator.Send(command);
+        return Ok(new { success = true, message = "Product deleted successfully." });
     }
 }

@@ -17,9 +17,19 @@ internal class ProductRepository(AppDbContext context) : IProductRepository
         return product;
     }
 
-    public async Task<List<Product>> GetAllAsync()
+    public async Task<List<Product>> GetAllAsync(
+        string? category,
+        bool? stock,
+        decimal? lowerPrice,
+        decimal? higherPrice)
     {
-        return await context.Products.ToListAsync();
+
+        return await context.Products
+            .Where(p => category == null || p.Category == null ? true : p.Category.ToLower() == category.ToLower())
+            .Where(p => stock == null || stock == true ? p.Stock > 0 : p.Stock == 0)
+            .Where(p => lowerPrice == null || p.Price >= lowerPrice)
+            .Where(p => higherPrice == null || p.Price <= higherPrice)
+            .ToListAsync();
     }
 
     public async Task AddAsync(Product product)
@@ -42,10 +52,5 @@ internal class ProductRepository(AppDbContext context) : IProductRepository
             context.Products.Remove(product);
             await context.SaveChangesAsync();
         }
-    }
-
-    public async Task<List<Product>> GetByCategoryAsync(string category)
-    {
-        return await context.Products.Where(p => p.Category == category).ToListAsync();
     }
 }

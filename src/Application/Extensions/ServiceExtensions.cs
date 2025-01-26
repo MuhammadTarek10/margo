@@ -31,7 +31,6 @@ public static class ServiceCollectionExtensions
         service.AddTransient<INotificationHandler<OrderCreatedEvent>, OrderCreatedEventHandler>();
         service.AddScoped<IChatService, ChatService>();
 
-
         service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
 
         service.AddHttpContextAccessor();

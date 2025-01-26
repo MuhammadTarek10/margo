@@ -12,53 +12,31 @@ namespace Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/cart")]
-public class CartController(IMediator mediator, ILogger<CartController> logger) : ControllerBase
+public class CartController(IMediator mediator) : ControllerBase
 {
     // GET: api/cart
     [HttpGet]
     public async Task<IActionResult> GetCart()
     {
-        try
-        {
-            var result = await mediator.Send(new GetCartQuery());
-            return Ok(new { success = true, data = result });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error retrieving cart");
-            return StatusCode(500, new { success = false, message = "An error occurred while retrieving the cart." });
-        }
+        var result = await mediator.Send(new GetCartQuery());
+        return Ok(new { success = true, data = result });
     }
 
-    // POST: api/cart/add-product
-    [HttpPost("add-product")]
+    // POST: api/cart/product
+    [HttpPost("product")]
     public async Task<IActionResult> AddItem([FromBody] AddToCartDto dto)
     {
-        try
-        {
-            Guid result = await mediator.Send(new AddProductToCartCommand { CartDto = dto });
-            return Ok(new { success = true, data = result });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error adding product to cart");
-            return StatusCode(500, new { success = false, message = "An error occurred while adding the product to the cart." });
-        }
+
+        Guid result = await mediator.Send(new AddProductToCartCommand { CartDto = dto });
+        return Ok(new { success = true, data = result });
     }
 
-    // DELETE: api/cart/remove-product
-    [HttpDelete("remove-product")]
-    public async Task<IActionResult> RemoveItem([FromBody] Guid productId)
+    // DELETE: api/cart/product
+    [HttpDelete("product/{id}")]
+    public async Task<IActionResult> RemoveItem(Guid id)
     {
-        try
-        {
-            await mediator.Send(new RemoveProductFromCartCommand { ProductId = productId });
-            return Ok(new { success = true, message = "Product removed from cart successfully." });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error removing product from cart");
-            return StatusCode(500, new { success = false, message = "An error occurred while removing the product from the cart." });
-        }
+
+        await mediator.Send(new RemoveProductFromCartCommand { ProductId = id });
+        return Ok(new { success = true, message = "Product removed from cart successfully." });
     }
 }

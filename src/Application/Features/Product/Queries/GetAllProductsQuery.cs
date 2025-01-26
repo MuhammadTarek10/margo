@@ -8,6 +8,10 @@ using MediatR;
 
 public class GetAllProductsQuery : IRequest<List<ProductDto>>
 {
+    public string? category { get; set; }
+    public bool? stock { get; set; }
+    public decimal? lowerPrice { get; set; }
+    public decimal? higherPrice { get; set; }
 }
 
 public class GetAllProductsQueryHandler(
@@ -17,7 +21,9 @@ public class GetAllProductsQueryHandler(
 
     public async Task<List<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        List<Product> products = await repository.GetAllAsync();
+
+        List<Product> products = await repository.GetAllAsync(request.category, request.stock, request.lowerPrice, request.higherPrice);
+
         return mapper.Map<List<ProductDto>>(products);
     }
 }
