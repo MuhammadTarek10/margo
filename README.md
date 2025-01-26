@@ -64,10 +64,13 @@ Margo
 │   │   ├── AuthController.cs
 │   │   ├── CartController.cs
 │   │   ├── OrderController.cs
-│   │   └── ProductsController.cs
+│   │   ├── ProductsController.cs
+│   │   ├── ChatController.cs
+│   │   ├── NotificationsController.cs
+│   │   └── DashboardController.cs
 │   ├── Middlewares
 │   ├── Program.cs
-│   └── appsettings.json
+│   ├── appsettings.json
 ├── Application
 │   ├── Features
 │   │   ├── Auth
@@ -81,8 +84,19 @@ Margo
 │   │   │   ├── Commands
 │   │   │   ├── Queries
 │   │   │   └── DTOs
-│   │   └── Products
-│   │       ├── Commands
+│   │   ├── Products
+│   │   │   ├── Commands
+│   │   │   ├── Queries
+│   │   │   └── DTOs
+│   │   ├── Chat
+│   │   │   ├── Commands
+│   │   │   ├── Queries
+│   │   │   └── DTOs
+│   │   ├── Notifications
+│   │   │   ├── Commands
+│   │   │   ├── Queries
+│   │   │   └── DTOs
+│   │   └── Dashboard
 │   │       ├── Queries
 │   │       └── DTOs
 │   └── Common
@@ -91,6 +105,9 @@ Margo
 │   ├── Interfaces
 │   └── Exceptions
 ├── Infrastructure
+│   ├── BackgroundWorkers
+│   │   ├── NotificationWorker.cs
+│   │   ├── OrderProcessingWorker.cs
 │   ├── Persistence
 │   │   ├── AppDbContext.cs
 │   │   ├── Migrations
